@@ -1,10 +1,9 @@
-FROM node:18 AS build
+FROM oven/bun AS build
 WORKDIR /app
-RUN npm i -g pnpm
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY package.json bun.lockb ./
+RUN bun install
 COPY . .
-RUN pnpm run build
+RUN bun run build
 
 FROM httpd:2.4 AS runtime
 COPY --from=build /app/dist /usr/local/apache2/htdocs/
