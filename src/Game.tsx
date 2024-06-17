@@ -128,7 +128,7 @@ function Game() {
 
   return (
     <>
-      <TilingSprite
+      {/* <TilingSprite
         width={screenWidth}
         height={totalHeight}
         image="circuit.png"
@@ -137,7 +137,7 @@ function Game() {
           x: -playerX / 2,
           y: 0,
         }}
-      />
+      /> */}
       <Container x={screenWidth / 2}>
         <Player
           onRestart={() => {
