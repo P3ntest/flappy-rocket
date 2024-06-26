@@ -24,24 +24,38 @@ import { useGameState } from "./stateStore";
 
 export function MainStage() {
   const window = useWindowSize();
+  const gameState = useGameState((s) => s.state);
 
   return (
-    <Stage
-      options={{
-        backgroundColor: "#2bd5ff",
-        height: window.height,
-        width: window.width,
-        antialias: true,
-      }}
-      style={{
-        height: "100vh",
-        width: "100vw",
-      }}
-      height={window.height}
-      width={window.width}
-    >
-      <Game />
-    </Stage>
+    <>
+      {gameState == "mainMenu" && (
+        <div
+          style={{
+            color: "#91CA3E",
+          }}
+          id="demotext"
+          className="fixed top-0 left-0 w-screen h-screen z-20 flex items-center justify-center font-mono text-9xl font-extrabold animate-bounce drop-shadow-2xl"
+        >
+          Play Now!
+        </div>
+      )}
+      <Stage
+        options={{
+          backgroundColor: "#2bd5ff",
+          height: window.height,
+          width: window.width,
+          antialias: true,
+        }}
+        style={{
+          height: "100vh",
+          width: "100vw",
+        }}
+        height={window.height}
+        width={window.width}
+      >
+        <Game />
+      </Stage>
+    </>
   );
 }
 
@@ -107,6 +121,10 @@ function Game() {
     // check for collisions
     if (checkIsColliding(playerX, playerY, pipes)) {
       setGameState("gameOver");
+      setTimeout(() => {
+        if (useGameState.getState().state === "gameOver")
+          setGameState("mainMenu");
+      }, 5000);
     }
 
     // check for passed pipes
@@ -171,7 +189,7 @@ function Game() {
           }
         />
       )}
-      {gameState === "mainMenu" && (
+      {/* {gameState === "mainMenu" && (
         <>
           <Text
             text="Flappy Rocket"
@@ -203,7 +221,7 @@ function Game() {
             }
           />
         </>
-      )}
+      )} */}
       {gameOver && (
         <>
           <Text
@@ -340,7 +358,6 @@ function Player({
   useTick(() => {
     const gamepad = navigator.getGamepads()[0];
     if (!gamepad) {
-      console.log("no gamepad");
       return;
     }
     const buttonState = gamepad.buttons[0].pressed;
